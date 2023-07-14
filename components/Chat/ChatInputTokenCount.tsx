@@ -5,13 +5,6 @@ import HomeContext from '@/pages/api/home/home.context';
 
 import cl100k_base from '@dqbd/tiktoken/encoders/cl100k_base.json';
 import { Tiktoken } from '@dqbd/tiktoken/lite';
-import BigNumber from 'bignumber.js';
-
-const PRICING: Record<string, BigNumber> = {
-  'gpt-4': BigNumber('0.03').div(1000),
-  'gpt-4-32k': BigNumber('0.03').div(1000),
-  'gpt-3.5-turbo': BigNumber('0.002').div(1000),
-};
 
 export function ChatInputTokenCount(props: { content: string | undefined }) {
   const { t } = useTranslation('chat');
@@ -57,15 +50,11 @@ export function ChatInputTokenCount(props: { content: string | undefined }) {
   ].join(msgSep);
 
   const count = tokenizer?.encode(serialized, 'all').length;
-  const pricing: BigNumber | undefined =
-    PRICING[selectedConversation?.model.id || 'gpt-3.5-turbo'];
 
-  if (pricing == null || count == null) return null;
   return (
     <div className="bg-opacity-10 bg-neutral-300 rounded-full py-1 px-2 text-neutral-400 pointer-events-auto">
-      {t('{{count}} tokens / ${{price}}', {
-        count,
-        price: pricing.multipliedBy(count).toFixed(),
+      {t('{{count}} tokens', {
+        count
       })}
     </div>
   );

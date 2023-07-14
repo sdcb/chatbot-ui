@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { OPENAI_API_HOST } from '@/utils/app/const';
+import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '@/utils/app/const';
 import { cleanSourceText } from '@/utils/server/google';
 
 import { Message } from '@/types/chat';
@@ -19,10 +19,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const query = encodeURIComponent(userMessage.content.trim());
 
     const googleRes = await fetch(
-      `https://customsearch.googleapis.com/customsearch/v1?key=${
-        googleAPIKey ? googleAPIKey : process.env.GOOGLE_API_KEY
-      }&cx=${
-        googleCSEId ? googleCSEId : process.env.GOOGLE_CSE_ID
+      `https://customsearch.googleapis.com/customsearch/v1?key=${googleAPIKey ? googleAPIKey : process.env.GOOGLE_API_KEY
+      }&cx=${googleCSEId ? googleCSEId : process.env.GOOGLE_CSE_ID
       }&q=${query}&num=5`,
     );
 
@@ -112,12 +110,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
     const answerMessage: Message = { role: 'user', content: answerPrompt };
 
-    const answerRes = await fetch(`${OPENAI_API_HOST}/v1/chat/completions`, {
+    let url = `${OPENAI_API_HOST}/v1/chat/completions`;
+    if (OPENAI_API_TYPE === 'azure') {
+      url = `${OPENAI_API_HOST}/openai/deployments/${model.id}/chat/completions?api-version=${OPENAI_API_VERSION}`;
+    }
+    const answerRes = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`,
-        ...(process.env.OPENAI_ORGANIZATION && {
-          'OpenAI-Organization': process.env.OPENAI_ORGANIZATION,
+        ...(OPENAI_API_TYPE === 'openai' && {
+          Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`
+        }),
+        ...(OPENAI_API_TYPE === 'azure' && {
+          'api-key': `${key ? key : process.env.OPENAI_API_KEY}`
+        }),
+        ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
+          'OpenAI-Organization': OPENAI_ORGANIZATION,
         }),
       },
       method: 'POST',
@@ -130,7 +137,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
           },
           answerMessage,
         ],
-        max_tokens: 1000,
         temperature: 1,
         stream: false,
       }),
@@ -142,7 +148,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     res.status(200).json({ answer });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error'})
+    res.status(500).json({ error: 'Error' })
   }
 };
 
