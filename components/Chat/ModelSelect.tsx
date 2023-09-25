@@ -3,7 +3,9 @@ import { useContext } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
-import { OpenAIModel } from '@/types/openai';
+import { getDefaultPrompt } from '@/utils/app/prompts';
+
+import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 
 import HomeContext from '@/pages/api/home/home.context';
 
@@ -17,13 +19,18 @@ export const ModelSelect = () => {
   } = useContext(HomeContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const model = models.find((model) => model.id === e.target.value);
     selectedConversation &&
-      handleUpdateConversation(selectedConversation, {
-        key: 'model',
-        value: models.find(
-          (model) => model.id === e.target.value,
-        ) as OpenAIModel,
-      });
+      handleUpdateConversation(selectedConversation, [
+        {
+          key: 'model',
+          value: model as OpenAIModel,
+        },
+        {
+          key: 'prompt',
+          value: t(getDefaultPrompt(model?.name)),
+        },
+      ]);
   };
 
   return (

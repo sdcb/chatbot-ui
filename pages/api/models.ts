@@ -1,6 +1,7 @@
-import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '@/utils/app/const';
+import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION, SPARK_API_KEY, SPARK_API_SECRET, SPARK_APP_ID } from '@/utils/app/const';
 
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { SparkIdNames } from '@/types/spark';
 
 export const config = {
   runtime: 'edge',
@@ -48,7 +49,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const json = await response.json();
 
-    const models: OpenAIModel[] = json.data
+    let models = json.data
       .map((model: any) => {
         const model_name = (OPENAI_API_TYPE === 'azure') ? model.model : model.id;
         for (const [key, value] of Object.entries(OpenAIModelID)) {
@@ -61,6 +62,10 @@ const handler = async (req: Request): Promise<Response> => {
         }
       })
       .filter(Boolean);
+
+      if(SPARK_APP_ID && SPARK_API_KEY && SPARK_API_SECRET) {
+        models = models.concat(SparkIdNames);
+      }
 
     return new Response(JSON.stringify(models), { status: 200 });
   } catch (error) {

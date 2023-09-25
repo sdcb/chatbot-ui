@@ -56,10 +56,12 @@ export const ConversationComponent = ({ conversation }: Props) => {
 
   const handleRename = (conversation: Conversation) => {
     if (renameValue.trim().length > 0) {
-      handleUpdateConversation(conversation, {
-        key: 'name',
-        value: renameValue,
-      });
+      handleUpdateConversation(conversation, [
+        {
+          key: 'name',
+          value: renameValue,
+        },
+      ]);
       setRenameValue('');
       setIsRenaming(false);
     }

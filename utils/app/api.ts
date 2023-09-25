@@ -1,12 +1,12 @@
-import { Plugin, PluginID } from '@/types/plugin';
+import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 
-export const getEndpoint = (plugin: Plugin | null) => {
-  if (!plugin) {
+export const getEndpoint = (model: OpenAIModel) => {
+  if (model.name.includes("GPT")) {
     return 'api/chat';
   }
 
-  if (plugin.id === PluginID.GOOGLE_SEARCH) {
-    return 'api/google';
+  if (model.name.includes("SPARK")) {
+    return 'api/spark';
   }
 
   return 'api/chat';
