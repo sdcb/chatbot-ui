@@ -22,7 +22,7 @@ import {
   updateConversation,
 } from '@/utils/app/conversation';
 import { saveFolders } from '@/utils/app/folders';
-import { savePrompts } from '@/utils/app/prompts';
+import { getDefaultPrompt, savePrompts } from '@/utils/app/prompts';
 import { getSettings } from '@/utils/app/settings';
 
 import { Conversation } from '@/types/chat';
@@ -191,7 +191,7 @@ const Home = ({
         maxLength: OpenAIModels[defaultModelId].maxLength,
         tokenLimit: OpenAIModels[defaultModelId].tokenLimit,
       },
-      prompt: DEFAULT_SYSTEM_PROMPT,
+      prompt: getDefaultPrompt(defaultModelId),
       temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
       folderId: null,
     };
@@ -209,13 +209,14 @@ const Home = ({
 
   const handleUpdateConversation = (
     conversation: Conversation,
-    data: KeyValuePair,
+    data: KeyValuePair[],
   ) => {
-    const updatedConversation = {
+    let updatedConversation = {
       ...conversation,
-      [data.key]: data.value,
-    };
-
+    } as any;
+    data.forEach((x) => {
+      updatedConversation[x.key] = x.value;
+    });
     const { single, all } = updateConversation(
       updatedConversation,
       conversations,
