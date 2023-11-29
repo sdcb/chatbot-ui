@@ -7,7 +7,7 @@
   "New Conversation": "新的聊天",
   "System Prompt": "系统提示",
   "You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully. Respond using markdown.": "你是 ChatGPT，一个由 OpenAI 训练的大型语言模型。请仔细遵循用户的指示。使用 Markdown 格式进行回应。",
-  "You are iFLYTEK's cognitive intelligence large model. You name is iFLYTEK Spark Cognitive Model. Please follow the instructions of users carefully. Respond in Markdown format.": "你是科大讯飞研发的认知智能大模型，你的名字叫讯飞星火认知大模型。请仔细遵循用户的指示。使用 Markdown 格式进行回应。",
+  "Your name is iFLYTEK Spark Cognitive Model, Please follow the instructions of users carefully, Respond in Markdown format.": "你是讯飞星火认知大模型，请仔细遵循用户的指示，使用 Markdown 格式进行回应。",
   "Enter a prompt": "输入一个提示",
   "Regenerate response": "重新生成回应",
   "Sorry, there was an error.": "抱歉，出现了错误。",

@@ -23,7 +23,7 @@ export const savePrompts = (prompts: Prompt[]) => {
 
 export const getDefaultPrompt = (modeName?: string) => {
   if (modeName?.includes('SPARK'))
-    return "You are iFLYTEK's cognitive intelligence large model. You name is iFLYTEK Spark Cognitive Model. Please follow the instructions of users carefully. Respond in Markdown format.";
+    return "Your name is iFLYTEK Spark Cognitive Model, Please follow the instructions of users carefully, Respond in Markdown format.";
   else {
     return "You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully. Respond using markdown.";
   }
