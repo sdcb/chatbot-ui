@@ -8,8 +8,7 @@ export interface OpenAIModel {
 }
 
 export enum OpenAIModelID {
-  SPARK_1_5 = 'spark-v-1-5',
-  SPARK_2 = 'spark-v-2',
+  SPARK_3 = 'spark-v-3',
   GPT_3_5 = 'gpt-3.5-turbo',
   GPT_3_5_AZ = 'gpt-35-turbo',
   GPT_4 = 'gpt-4',
@@ -20,15 +19,9 @@ export enum OpenAIModelID {
 export const fallbackModelID = OpenAIModelID.GPT_3_5;
 
 export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> = {
-  [OpenAIModelID.SPARK_1_5]: {
-    id: OpenAIModelID.SPARK_1_5,
-    name: 'SPARK-1.5',
-    maxLength: 8192,
-    tokenLimit: 8192,
-  },
-  [OpenAIModelID.SPARK_2]: {
-    id: OpenAIModelID.SPARK_2,
-    name: 'SPARK-2.0',
+  [OpenAIModelID.SPARK_3]: {
+    id: OpenAIModelID.SPARK_3,
+    name: 'SPARK-3.0',
     maxLength: 8192,
     tokenLimit: 8192,
   },

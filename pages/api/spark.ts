@@ -10,8 +10,7 @@ import {
 import { ModelVersion, SparkClient } from 'spark-node-sdk';
 
 const ChatDomain = {
-  [ModelVersion.V1_5]: 'general',
-  [ModelVersion.V2]: 'generalv2',
+  [ModelVersion.V3]: 'generalv3',
 };
 
 export const config = {
