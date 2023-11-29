@@ -19,10 +19,14 @@ export function* chatAsStreamAsync(
 
         const resp = JSON.parse(event.data) as any;
         if (resp.header.code !== 0) {
-          throw new Error(
-            `code: ${resp.header.code}, sid: ${resp.header.sid}, message: ${resp.header.message}`,
-          );
+            resolve({
+              text: `Error! code: ${resp.header.code}, sid: ${resp.header.sid}, message: ${resp.header.message}`
+            });
+            end = true;
+            close();
+            return;
         }
+        
 
         const text = resp.payload.choices.text
           .map((t: any) => t.content)
